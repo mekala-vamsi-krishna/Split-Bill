@@ -10,10 +10,25 @@ import SwiftData
 
 // MARK: - Views
 struct ContentView: View {
+    
+    let container: ModelContainer
+    
     @Environment(\.modelContext) private var context
     
     @State private var groupViewModel: GroupViewModel?
+    
     @StateObject private var authViewModel = AuthViewModel()
+    
+    @StateObject private var createGroupViewModel: CreateGroupViewModel
+
+    init() {
+        let container = try! ModelContainer(for: Group.self, User.self)
+        _createGroupViewModel = StateObject(
+            wrappedValue: CreateGroupViewModel(context: container.mainContext)
+        )
+        self.container = container
+    }
+
 
     var body: some View {
         NavigationView {
@@ -21,6 +36,7 @@ struct ContentView: View {
                 if authViewModel.isAuthenticated {
                     HomeView()
                         .environmentObject(authViewModel)
+                        .environmentObject(createGroupViewModel)
                 } else if authViewModel.isOTPSent {
                     OTPView()
                         .environmentObject(authViewModel)
@@ -44,5 +60,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

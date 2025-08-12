@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AC5383DE2E1A94700090E5D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5383DA2E1A94700090E5D9 /* ContentView.swift */; };
-		AC5383DF2E1A94700090E5D9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5383DB2E1A94700090E5D9 /* Item.swift */; };
 		AC5383E02E1A94700090E5D9 /* SplitBillApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5383DC2E1A94700090E5D9 /* SplitBillApp.swift */; };
 		AC5383E12E1A94700090E5D9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC5383D72E1A94700090E5D9 /* Preview Assets.xcassets */; };
 		AC5383E22E1A94700090E5D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC5383D92E1A94700090E5D9 /* Assets.xcassets */; };
@@ -39,7 +38,6 @@
 		AC5383D72E1A94700090E5D9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AC5383D92E1A94700090E5D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AC5383DA2E1A94700090E5D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		AC5383DB2E1A94700090E5D9 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		AC5383DC2E1A94700090E5D9 /* SplitBillApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitBillApp.swift; sourceTree = "<group>"; };
 		AC5383E42E1A96380090E5D9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		AC5383E62E1A963F0090E5D9 /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
@@ -101,48 +99,22 @@
 		AC5383DD2E1A94700090E5D9 /* SplitBill */ = {
 			isa = PBXGroup;
 			children = (
-				AC5384032E1B1CB10090E5D9 /* Resources */,
 				AC5384022E1B1C8C0090E5D9 /* App */,
-				AC5383E32E1A96210090E5D9 /* Models */,
-				AC5383EA2E1A96760090E5D9 /* ViewModels */,
-				AC5383EF2E1A96B50090E5D9 /* Views */,
+				AC5383EF2E1A96B50090E5D9 /* Features */,
+				AC9CD0002E4BA487002ED5F0 /* Shared */,
 				AC5383D82E1A94700090E5D9 /* Preview Content */,
 			);
 			path = SplitBill;
 			sourceTree = "<group>";
 		};
-		AC5383E32E1A96210090E5D9 /* Models */ = {
+		AC5383EF2E1A96B50090E5D9 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				AC5383DB2E1A94700090E5D9 /* Item.swift */,
-				AC5383E42E1A96380090E5D9 /* UserModel.swift */,
-				AC5383E62E1A963F0090E5D9 /* GroupModel.swift */,
-				AC5383E82E1A96490090E5D9 /* ExpenseModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		AC5383EA2E1A96760090E5D9 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				AC5383EB2E1A96830090E5D9 /* AuthViewModel.swift */,
-				AC5383ED2E1A968E0090E5D9 /* GroupViewModel.swift */,
-				AC53840C2E1BA85D0090E5D9 /* CreateGroupViewModel.swift */,
-				AC53840A2E1BA7560090E5D9 /* GroupDetailViewModel.swift */,
-				AC5384082E1BA19B0090E5D9 /* ExpenseDetailsViewModel.swift */,
-				AC53840E2E1BADF80090E5D9 /* AddExpenseViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		AC5383EF2E1A96B50090E5D9 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				AC5384122E1BC2ED0090E5D9 /* AuthView */,
+				AC5384122E1BC2ED0090E5D9 /* Auth */,
 				AC5384102E1BC2760090E5D9 /* HomeView */,
 				AC5384112E1BC28F0090E5D9 /* GroupDetailView */,
 			);
-			path = Views;
+			path = Features;
 			sourceTree = "<group>";
 		};
 		AC5384022E1B1C8C0090E5D9 /* App */ = {
@@ -165,9 +137,9 @@
 		AC5384102E1BC2760090E5D9 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
-				AC5383F82E1A96F60090E5D9 /* CreateGroupView.swift */,
-				AC5383F62E1A96EE0090E5D9 /* GroupRowView.swift */,
-				AC5383F42E1A96E20090E5D9 /* HomeView.swift */,
+				AC9CCFFC2E4B9FDA002ED5F0 /* Model */,
+				AC9CCFFB2E4B9FD2002ED5F0 /* View */,
+				AC9CCFF52E4B9D31002ED5F0 /* ViewModel */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -175,27 +147,28 @@
 		AC5384112E1BC28F0090E5D9 /* GroupDetailView */ = {
 			isa = PBXGroup;
 			children = (
-				AC5383FA2E1A96FF0090E5D9 /* GroupDetailView.swift */,
-				AC5384132E1BC3260090E5D9 /* MembersView */,
 				AC5384142E1BC33E0090E5D9 /* ExpenseView */,
+				AC5384132E1BC3260090E5D9 /* MembersView */,
 			);
 			path = GroupDetailView;
 			sourceTree = "<group>";
 		};
-		AC5384122E1BC2ED0090E5D9 /* AuthView */ = {
+		AC5384122E1BC2ED0090E5D9 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				AC5383F02E1A96C20090E5D9 /* LoginView.swift */,
-				AC5383F22E1A96D70090E5D9 /* OTPView.swift */,
+				AC9CCFF22E4B9CE5002ED5F0 /* Model */,
+				AC9CCFF32E4B9CED002ED5F0 /* View */,
+				AC9CCFF42E4B9CF3002ED5F0 /* ViewModel */,
 			);
-			path = AuthView;
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		AC5384132E1BC3260090E5D9 /* MembersView */ = {
 			isa = PBXGroup;
 			children = (
-				AC5384042E1B1D600090E5D9 /* MembersView.swift */,
-				AC5383FE2E1A97180090E5D9 /* AddMemberView.swift */,
+				AC9CCFFF2E4BA296002ED5F0 /* Model */,
+				AC9CCFFE2E4BA292002ED5F0 /* View */,
+				AC9CCFFD2E4BA28B002ED5F0 /* ViewModel */,
 			);
 			path = MembersView;
 			sourceTree = "<group>";
@@ -203,11 +176,123 @@
 		AC5384142E1BC33E0090E5D9 /* ExpenseView */ = {
 			isa = PBXGroup;
 			children = (
+				AC9CCFFA2E4B9DC1002ED5F0 /* Model */,
+				AC9CCFF92E4B9DBC002ED5F0 /* View */,
+				AC9CCFF82E4B9DAF002ED5F0 /* ViewModel */,
+			);
+			path = ExpenseView;
+			sourceTree = "<group>";
+		};
+		AC9CCFF22E4B9CE5002ED5F0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383E42E1A96380090E5D9 /* UserModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC9CCFF32E4B9CED002ED5F0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383F02E1A96C20090E5D9 /* LoginView.swift */,
+				AC5383F22E1A96D70090E5D9 /* OTPView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AC9CCFF42E4B9CF3002ED5F0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383EB2E1A96830090E5D9 /* AuthViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		AC9CCFF52E4B9D31002ED5F0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383ED2E1A968E0090E5D9 /* GroupViewModel.swift */,
+				AC53840C2E1BA85D0090E5D9 /* CreateGroupViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		AC9CCFF82E4B9DAF002ED5F0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				AC53840A2E1BA7560090E5D9 /* GroupDetailViewModel.swift */,
+				AC5384082E1BA19B0090E5D9 /* ExpenseDetailsViewModel.swift */,
+				AC53840E2E1BADF80090E5D9 /* AddExpenseViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		AC9CCFF92E4B9DBC002ED5F0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383FA2E1A96FF0090E5D9 /* GroupDetailView.swift */,
 				AC5383FC2E1A970F0090E5D9 /* ExpenseRowView.swift */,
 				AC5384062E1BA0B00090E5D9 /* ExpenseDetailsView.swift */,
 				AC5384002E1A97260090E5D9 /* AddExpenseView.swift */,
 			);
-			path = ExpenseView;
+			path = View;
+			sourceTree = "<group>";
+		};
+		AC9CCFFA2E4B9DC1002ED5F0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383E82E1A96490090E5D9 /* ExpenseModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC9CCFFB2E4B9FD2002ED5F0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383F42E1A96E20090E5D9 /* HomeView.swift */,
+				AC5383F62E1A96EE0090E5D9 /* GroupRowView.swift */,
+				AC5383F82E1A96F60090E5D9 /* CreateGroupView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AC9CCFFC2E4B9FDA002ED5F0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AC5383E62E1A963F0090E5D9 /* GroupModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC9CCFFD2E4BA28B002ED5F0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		AC9CCFFE2E4BA292002ED5F0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AC5384042E1B1D600090E5D9 /* MembersView.swift */,
+				AC5383FE2E1A97180090E5D9 /* AddMemberView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AC9CCFFF2E4BA296002ED5F0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC9CD0002E4BA487002ED5F0 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				AC5384032E1B1CB10090E5D9 /* Resources */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,7 +384,6 @@
 				AC5383EC2E1A96830090E5D9 /* AuthViewModel.swift in Sources */,
 				AC5383F32E1A96D70090E5D9 /* OTPView.swift in Sources */,
 				AC53840B2E1BA7640090E5D9 /* GroupDetailViewModel.swift in Sources */,
-				AC5383DF2E1A94700090E5D9 /* Item.swift in Sources */,
 				AC5384052E1B1D600090E5D9 /* MembersView.swift in Sources */,
 				AC5383E52E1A96380090E5D9 /* UserModel.swift in Sources */,
 				AC5383E02E1A94700090E5D9 /* SplitBillApp.swift in Sources */,

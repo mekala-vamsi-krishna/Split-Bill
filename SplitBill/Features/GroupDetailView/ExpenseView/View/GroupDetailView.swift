@@ -73,10 +73,6 @@ struct GroupDetailView: View {
                             .cornerRadius(20)
                     }
                     
-                    NavigationLink(destination: MembersView(group: group), isActive: $showingAddMember) {
-                        EmptyView()
-                    }
-                    
                     Button(action: {
                         showingAddExpense = true
                     }) {
