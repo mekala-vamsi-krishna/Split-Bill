@@ -8,13 +8,32 @@
 import SwiftUI
 import SwiftData
 
+struct ProfileIconView: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color.blue)
+                .frame(maxWidth: 40, maxHeight: 40)
+                .frame(width: 40, height: 40)
+                .overlay(
+                    Text("MVK")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                )
+        }
+    }
+}
+
 struct HomeView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var groupViewModel: GroupViewModel
     @EnvironmentObject var createGroupViewModel: CreateGroupViewModel
     @EnvironmentObject var groupdetailsViewModel: GroupDetailsViewModel
+    
     @State private var showingCreateGroup = false
     @State private var showDeleteAlert = false
+    @State private var showingProfile = false
+
     @State private var groupToDelete: Group?
 
     private func confirmDeleteGroup(at offsets: IndexSet) {
@@ -80,13 +99,12 @@ struct HomeView: View {
             .navigationTitle("Split Bill")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Logout") {
-                        authViewModel.isAuthenticated = false
-                        authViewModel.isOTPSent = false
-                        authViewModel.phoneNumber = ""
-                        authViewModel.otp = ""
+                    Button {
+                        showingProfile = true
+                    } label: {
+                        ProfileIconView()
                     }
-                    .foregroundColor(.red)
+
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -107,6 +125,9 @@ struct HomeView: View {
                 GroupDetailView(group: group)
                     .environmentObject(groupdetailsViewModel)
             }
+            .fullScreenCover(isPresented: $showingProfile, content: {
+                ProfileView()
+            })
             .alert("Delete Group?", isPresented: $showDeleteAlert) {
                 Button("Delete", role: .destructive) {
                     if let group = groupToDelete {
