@@ -4,22 +4,19 @@
 //
 //  Created by Mekala Vamsi Krishna on 7/6/25.
 //
-
-import SwiftUI
-
 import SwiftUI
 import PhotosUI
 
 struct CreateGroupView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var createGroupViewModel: CreateGroupViewModel
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var groupViewModel: GroupViewModel
     
     @State private var groupName = ""
     @State private var selectedMembers: [User] = []
     @State private var selectedPhoto: PhotosPickerItem? = nil
     @State private var groupImage: UIImage? = nil
     
-    // Dummy SplitBill users (simulate existing accounts)
+    // Dummy users (simulate existing accounts)
     let allUsers: [User] = [
         User(name: "Alice", phoneNumber: "1234567890"),
         User(name: "Bob", phoneNumber: "9876543210"),
@@ -31,7 +28,7 @@ struct CreateGroupView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Group image
+                    // MARK: - Group Image
                     PhotosPicker(selection: $selectedPhoto, matching: .images) {
                         if let image = groupImage {
                             Image(uiImage: image)
@@ -60,24 +57,24 @@ struct CreateGroupView: View {
                             }
                         }
                     }
-
-                    // Group name
+                    
+                    // MARK: - Group Name
                     TextField("Enter group name", text: $groupName)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                         .padding(.horizontal)
-
-                    // Member selection
+                    
+                    // MARK: - Member Selection
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Select Members")
                             .font(.headline)
                             .padding(.horizontal)
-
+                        
                         ForEach(allUsers) { user in
-                            Button(action: {
+                            Button {
                                 toggleUser(user)
-                            }) {
+                            } label: {
                                 HStack {
                                     Image(systemName: selectedMembers.contains(where: { $0.id == user.id }) ? "checkmark.circle.fill" : "circle")
                                         .foregroundColor(.blue)
@@ -97,7 +94,7 @@ struct CreateGroupView: View {
                             .padding(.horizontal)
                         }
                     }
-
+                    
                     Spacer()
                 }
                 .padding(.top)
@@ -106,21 +103,19 @@ struct CreateGroupView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Create") {
-                        createGroupViewModel.createGroup(name: groupName, members: selectedMembers)
-                        presentationMode.wrappedValue.dismiss()
+                        groupViewModel.createGroup(name: groupName, members: selectedMembers)
+                        dismiss()
                     }
                     .disabled(groupName.trimmingCharacters(in: .whitespaces).isEmpty || selectedMembers.isEmpty)
                 }
             }
         }
     }
-
+    
     private func toggleUser(_ user: User) {
         if let index = selectedMembers.firstIndex(where: { $0.id == user.id }) {
             selectedMembers.remove(at: index)
@@ -128,9 +123,7 @@ struct CreateGroupView: View {
             selectedMembers.append(user)
         }
     }
-
 }
-
 
 #Preview {
     CreateGroupView()

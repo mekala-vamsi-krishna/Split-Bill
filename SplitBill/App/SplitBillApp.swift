@@ -28,25 +28,26 @@ struct SplitBillApp: App {
 
     // 2. Pass mainContext to ViewModel
     @StateObject private var groupViewModel: GroupViewModel
-    @StateObject private var createGroupViewModel: CreateGroupViewModel
     @StateObject private var groupDetailsViewModel = GroupDetailsViewModel()
     @StateObject private var authViewModel = AuthViewModel()
 
     init() {
         let context = sharedModelContainer.mainContext
         _groupViewModel = StateObject(wrappedValue: GroupViewModel(context: context))
-        _createGroupViewModel = StateObject(wrappedValue: CreateGroupViewModel(context: context))
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authViewModel)
-                .environmentObject(createGroupViewModel)
                 .environmentObject(groupViewModel)
                 .environmentObject(groupDetailsViewModel)
                 .environment(\.modelContext, sharedModelContainer.mainContext) // ✅ Inject your own context
         }
+        .modelContainer(for: Group.self)
+        .modelContainer(for: User.self)
+        .modelContainer(for: Expense.self)
     }
 }
 

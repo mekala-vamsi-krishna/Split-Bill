@@ -42,7 +42,6 @@ struct ProfileView: View {
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var groupViewModel: GroupViewModel
-    @EnvironmentObject var createGroupViewModel: CreateGroupViewModel
     @EnvironmentObject var groupdetailsViewModel: GroupDetailsViewModel
     
     var body: some View {

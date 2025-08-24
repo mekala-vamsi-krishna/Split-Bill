@@ -16,7 +16,7 @@ struct ProfileIconView: View {
                 .frame(maxWidth: 40, maxHeight: 40)
                 .frame(width: 40, height: 40)
                 .overlay(
-                    Text("MVK")
+                    Text("MR")
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                 )
@@ -25,9 +25,10 @@ struct ProfileIconView: View {
 }
 
 struct HomeView: View {
+    @Environment(\.modelContext) var modelContext
+    
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var groupViewModel: GroupViewModel
-    @EnvironmentObject var createGroupViewModel: CreateGroupViewModel
     @EnvironmentObject var groupdetailsViewModel: GroupDetailsViewModel
     
     @State private var showingCreateGroup = false
@@ -119,7 +120,7 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showingCreateGroup) {
                 CreateGroupView()
-                    .environmentObject(createGroupViewModel)
+                    .environmentObject(groupViewModel)
             }
             .navigationDestination(item: $selectedGroup) { group in
                 GroupDetailView(group: group)
@@ -149,5 +150,8 @@ struct HomeView: View {
     let container = try! ModelContainer(for: Group.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = container.mainContext
     HomeView()
+        .modelContainer(for: Group.self, inMemory: true)
         .environmentObject(GroupViewModel(context: context))
+        .environmentObject(GroupDetailsViewModel())
+        .environmentObject(AuthViewModel())
 }

@@ -18,14 +18,9 @@ struct ContentView: View {
     @State private var groupViewModel: GroupViewModel?
     
     @StateObject private var authViewModel = AuthViewModel()
-    
-    @StateObject private var createGroupViewModel: CreateGroupViewModel
 
     init() {
         let container = try! ModelContainer(for: Group.self, User.self)
-        _createGroupViewModel = StateObject(
-            wrappedValue: CreateGroupViewModel(context: container.mainContext)
-        )
         self.container = container
     }
 
@@ -36,7 +31,7 @@ struct ContentView: View {
                 if authViewModel.isAuthenticated {
                     HomeView()
                         .environmentObject(authViewModel)
-                        .environmentObject(createGroupViewModel)
+                        .environmentObject(groupViewModel)
                 } else if authViewModel.isOTPSent {
                     OTPView()
                         .environmentObject(authViewModel)

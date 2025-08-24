@@ -29,7 +29,6 @@
 		AC5384072E1BA0B10090E5D9 /* ExpenseDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5384062E1BA0B00090E5D9 /* ExpenseDetailsView.swift */; };
 		AC5384092E1BA19B0090E5D9 /* ExpenseDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5384082E1BA19B0090E5D9 /* ExpenseDetailsViewModel.swift */; };
 		AC53840B2E1BA7640090E5D9 /* GroupDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC53840A2E1BA7560090E5D9 /* GroupDetailViewModel.swift */; };
-		AC53840D2E1BA85D0090E5D9 /* CreateGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC53840C2E1BA85D0090E5D9 /* CreateGroupViewModel.swift */; };
 		AC53840F2E1BADF80090E5D9 /* AddExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC53840E2E1BADF80090E5D9 /* AddExpenseViewModel.swift */; };
 		AC9ABE1C2E52803000747C83 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9ABE1B2E52803000747C83 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
@@ -58,7 +57,6 @@
 		AC5384062E1BA0B00090E5D9 /* ExpenseDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDetailsView.swift; sourceTree = "<group>"; };
 		AC5384082E1BA19B0090E5D9 /* ExpenseDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDetailsViewModel.swift; sourceTree = "<group>"; };
 		AC53840A2E1BA7560090E5D9 /* GroupDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewModel.swift; sourceTree = "<group>"; };
-		AC53840C2E1BA85D0090E5D9 /* CreateGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupViewModel.swift; sourceTree = "<group>"; };
 		AC53840E2E1BADF80090E5D9 /* AddExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseViewModel.swift; sourceTree = "<group>"; };
 		AC9ABE1B2E52803000747C83 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -231,7 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				AC5383ED2E1A968E0090E5D9 /* GroupViewModel.swift */,
-				AC53840C2E1BA85D0090E5D9 /* CreateGroupViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -397,7 +394,6 @@
 				AC5383F12E1A96C20090E5D9 /* LoginView.swift in Sources */,
 				AC5383E72E1A963F0090E5D9 /* GroupModel.swift in Sources */,
 				AC5383F72E1A96EE0090E5D9 /* GroupRowView.swift in Sources */,
-				AC53840D2E1BA85D0090E5D9 /* CreateGroupViewModel.swift in Sources */,
 				AC5383F52E1A96E20090E5D9 /* HomeView.swift in Sources */,
 				AC5383FF2E1A97180090E5D9 /* AddMemberView.swift in Sources */,
 				AC5383EC2E1A96830090E5D9 /* AuthViewModel.swift in Sources */,
