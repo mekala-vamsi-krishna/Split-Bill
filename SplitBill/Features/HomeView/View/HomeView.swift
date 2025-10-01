@@ -150,8 +150,8 @@ struct HomeView: View {
     let container = try! ModelContainer(for: Group.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = container.mainContext
     HomeView()
-        .modelContainer(for: Group.self, inMemory: true)
+        .environment(\.modelContext, context)
         .environmentObject(GroupViewModel(context: context))
-        .environmentObject(GroupDetailsViewModel())
-        .environmentObject(AuthViewModel())
+        .environmentObject(GroupDetailsViewModel(context: context))
+        .environmentObject(AuthViewModel(context: context))
 }

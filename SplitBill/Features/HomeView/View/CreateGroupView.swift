@@ -10,6 +10,7 @@ import PhotosUI
 struct CreateGroupView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var groupViewModel: GroupViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     @State private var groupName = ""
     @State private var selectedMembers: [User] = []
@@ -106,11 +107,17 @@ struct CreateGroupView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
+                    // inside CreateGroupView toolbar "Create" button
                     Button("Create") {
-                        groupViewModel.createGroup(name: groupName, members: selectedMembers)
+                        var membersToCreate = selectedMembers
+                        if let me = authViewModel.currentUser, !membersToCreate.contains(where: { $0.id == me.id }) {
+                            membersToCreate.append(me)
+                        }
+                        groupViewModel.createGroup(name: groupName, members: membersToCreate)
                         dismiss()
                     }
                     .disabled(groupName.trimmingCharacters(in: .whitespaces).isEmpty || selectedMembers.isEmpty)
+
                 }
             }
         }

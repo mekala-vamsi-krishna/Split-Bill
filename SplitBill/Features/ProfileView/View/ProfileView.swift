@@ -136,9 +136,7 @@ struct ProfileView: View {
             // Logout button
             Button(action: {
                 authViewModel.isAuthenticated = false
-                authViewModel.isOTPSent = false
                 authViewModel.phoneNumber = ""
-                authViewModel.otp = ""
             }) {
                 Text("Log Out")
                     .frame(maxWidth: .infinity)

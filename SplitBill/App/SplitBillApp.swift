@@ -7,47 +7,31 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseCore
 
 @main
 struct SplitBillApp: App {
-    // 1. Define your schema correctly
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Group.self,
-            User.self,
-            Expense.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
-    // 2. Pass mainContext to ViewModel
-    @StateObject private var groupViewModel: GroupViewModel
-    @StateObject private var groupDetailsViewModel = GroupDetailsViewModel()
-    @StateObject private var authViewModel = AuthViewModel()
+    let container: ModelContainer
 
     init() {
-        let context = sharedModelContainer.mainContext
-        _groupViewModel = StateObject(wrappedValue: GroupViewModel(context: context))
-        print(URL.applicationSupportDirectory.path(percentEncoded: false))
+        // Configure Firebase
+        FirebaseApp.configure()
+
+        // Create ModelContainer for SwiftData models
+        self.container = try! ModelContainer(
+            for: User.self, Group.self, Expense.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: false)
+        )
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(authViewModel)
-                .environmentObject(groupViewModel)
-                .environmentObject(groupDetailsViewModel)
-                .environment(\.modelContext, sharedModelContainer.mainContext) // ✅ Inject your own context
+            RootView()
+                .environment(\.modelContext, container.mainContext)
+                .environmentObject(AuthViewModel(context: container.mainContext))
+                .environmentObject(GroupViewModel(context: container.mainContext))
+                .environmentObject(GroupDetailsViewModel(context: container.mainContext))
+                // Add other view models if needed
         }
-        .modelContainer(for: Group.self)
-        .modelContainer(for: User.self)
-        .modelContainer(for: Expense.self)
     }
 }
-

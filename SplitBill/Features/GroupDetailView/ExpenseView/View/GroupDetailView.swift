@@ -163,6 +163,6 @@ struct GroupDetailView: View {
             )
         ]
     ))
-    .environmentObject(GroupDetailsViewModel())
+    .environmentObject(GroupDetailsViewModel(context: context))
 }
 
