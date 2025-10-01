@@ -5,6 +5,7 @@
 //  Created by Mekala Vamsi Krishna on 7/6/25.
 //
 import SwiftUI
+import FirebaseFirestore
 import PhotosUI
 
 struct CreateGroupView: View {
@@ -14,50 +15,14 @@ struct CreateGroupView: View {
     
     @State private var groupName = ""
     @State private var selectedMembers: [User] = []
-    @State private var selectedPhoto: PhotosPickerItem? = nil
-    @State private var groupImage: UIImage? = nil
-    
-    // Dummy users (simulate existing accounts)
-    let allUsers: [User] = [
-        User(name: "Alice", phoneNumber: "1234567890"),
-        User(name: "Bob", phoneNumber: "9876543210"),
-        User(name: "Charlie", phoneNumber: "5556667777"),
-        User(name: "David", phoneNumber: "9998887777")
-    ]
+    @State private var searchText = ""
+    @State private var searchResults: [User] = []
+    @State private var isSearching = false
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // MARK: - Group Image
-                    PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                        if let image = groupImage {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                                .shadow(radius: 4)
-                        } else {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.gray.opacity(0.1))
-                                    .frame(width: 100, height: 100)
-                                Image(systemName: "photo.on.rectangle.angled")
-                                    .font(.system(size: 30))
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                    }
-                    .onChange(of: selectedPhoto) { newItem in
-                        Task {
-                            if let data = try? await newItem?.loadTransferable(type: Data.self),
-                               let uiImage = UIImage(data: data) {
-                                groupImage = uiImage
-                            }
-                        }
-                    }
                     
                     // MARK: - Group Name
                     TextField("Enter group name", text: $groupName)
@@ -66,13 +31,34 @@ struct CreateGroupView: View {
                         .cornerRadius(10)
                         .padding(.horizontal)
                     
-                    // MARK: - Member Selection
+                    // MARK: - Member Search
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Select Members")
+                        Text("Add Members by Email")
                             .font(.headline)
                             .padding(.horizontal)
                         
-                        ForEach(allUsers) { user in
+                        TextField("Search by email", text: $searchText)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                            .onChange(of: searchText) { newValue in
+                                searchUsers(by: newValue)
+                            }
+                        
+                        if isSearching {
+                            ProgressView("Searching...")
+                                .padding(.horizontal)
+                        } else if searchResults.isEmpty && !searchText.isEmpty {
+                            Text("No matches found")
+                                .foregroundColor(.secondary)
+                                .padding(.horizontal)
+                        }
+                        
+                        ForEach(searchResults) { user in
                             Button {
                                 toggleUser(user)
                             } label: {
@@ -81,7 +67,7 @@ struct CreateGroupView: View {
                                         .foregroundColor(.blue)
                                     VStack(alignment: .leading) {
                                         Text(user.name)
-                                        Text(user.phoneNumber)
+                                        Text(user.email ?? "")
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                     }
@@ -90,9 +76,9 @@ struct CreateGroupView: View {
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .cornerRadius(8)
+                                .padding(.horizontal)
                             }
                             .buttonStyle(.plain)
-                            .padding(.horizontal)
                         }
                     }
                     
@@ -107,7 +93,6 @@ struct CreateGroupView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // inside CreateGroupView toolbar "Create" button
                     Button("Create") {
                         var membersToCreate = selectedMembers
                         if let me = authViewModel.currentUser, !membersToCreate.contains(where: { $0.id == me.id }) {
@@ -117,7 +102,6 @@ struct CreateGroupView: View {
                         dismiss()
                     }
                     .disabled(groupName.trimmingCharacters(in: .whitespaces).isEmpty || selectedMembers.isEmpty)
-
                 }
             }
         }
@@ -128,6 +112,44 @@ struct CreateGroupView: View {
             selectedMembers.remove(at: index)
         } else {
             selectedMembers.append(user)
+        }
+    }
+    
+    // MARK: - Firebase search
+    private func searchUsers(by email: String) {
+        guard !email.isEmpty else {
+            searchResults = []
+            return
+        }
+        
+        isSearching = true
+        let db = Firestore.firestore()
+        
+        Task {
+            do {
+                let snapshot = try await db.collection("users")
+                    .whereField("email", isEqualTo: email.lowercased())
+                    .getDocuments()
+                
+                isSearching = false
+                
+                if snapshot.documents.isEmpty {
+                    searchResults = []
+                } else {
+                    searchResults = snapshot.documents.compactMap { doc in
+                        let data = doc.data()
+                        guard let name = data["name"] as? String,
+                              let phone = data["phone"] as? String else { return nil }
+                        let uid = data["uid"] as? String
+                        let email = data["email"] as? String
+                        return User(name: name, phoneNumber: phone, uid: uid, email: email)
+                    }
+                }
+            } catch {
+                print("Error searching users:", error.localizedDescription)
+                isSearching = false
+                searchResults = []
+            }
         }
     }
 }

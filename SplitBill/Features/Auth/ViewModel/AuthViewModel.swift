@@ -123,4 +123,21 @@ class AuthViewModel: ObservableObject {
             print("fetchOrCreateLocalUser error:", error)
         }
     }
+    
+    func searchUser(byEmail email: String) async throws -> [User] {
+        let snapshot = try await db.collection("users")
+            .whereField("email", isEqualTo: email.lowercased())
+            .getDocuments()
+        
+        return snapshot.documents.compactMap { doc in
+            let data = doc.data()
+            return User(
+                name: data["name"] as? String ?? "",
+                phoneNumber: data["phone"] as? String ?? "",
+                uid: data["uid"] as? String,
+                email: data["email"] as? String
+            )
+        }
+    }
+
 }
