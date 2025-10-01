@@ -44,6 +44,13 @@ class GroupViewModel: ObservableObject {
         let newUser = User(name: name, phoneNumber: phoneNumber)
         addMember(to: group, member: newUser)
     }
+
+    func removeMember(from group: Group, at offsets: IndexSet) {
+        if let index = groups.firstIndex(where: { $0.id == group.id }) {
+            groups[index].members.remove(atOffsets: offsets)
+            saveContext()
+        }
+    }
     
     // MARK: - Fetching
     

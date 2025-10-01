@@ -9,18 +9,28 @@ import SwiftUI
 import SwiftData
 
 struct ProfileIconView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     var body: some View {
+        let initials = getInitials(from: authViewModel.currentUser?.name ?? "")
+        
         ZStack {
             Circle()
-                .fill(Color.blue)
-                .frame(maxWidth: 40, maxHeight: 40)
+                .fill(Color.blue.opacity(0.1))
                 .frame(width: 40, height: 40)
-                .overlay(
-                    Text("MR")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                )
+            
+            Text(initials)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.blue)
         }
+    }
+    
+    private func getInitials(from name: String) -> String {
+        let components = name.split(separator: " ")
+        let first = components.first?.first.map { String($0) } ?? ""
+        let last = components.dropFirst().first?.first.map { String($0) } ?? ""
+        return (first + last).uppercased()
     }
 }
 
