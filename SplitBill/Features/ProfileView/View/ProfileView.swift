@@ -42,7 +42,6 @@ struct ProfileView: View {
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var groupViewModel: GroupViewModel
-    @EnvironmentObject var createGroupViewModel: CreateGroupViewModel
     @EnvironmentObject var groupdetailsViewModel: GroupDetailsViewModel
     
     var body: some View {
@@ -137,9 +136,7 @@ struct ProfileView: View {
             // Logout button
             Button(action: {
                 authViewModel.isAuthenticated = false
-                authViewModel.isOTPSent = false
                 authViewModel.phoneNumber = ""
-                authViewModel.otp = ""
             }) {
                 Text("Log Out")
                     .frame(maxWidth: .infinity)

@@ -4,56 +4,65 @@
 //
 //  Created by Mekala Vamsi Krishna on 7/6/25.
 //
-
 import Foundation
 import SwiftData
 
+@MainActor
 class GroupViewModel: ObservableObject {
     @Published var groups: [Group] = []
     @Published var selectedGroup: Group?
     
-    private var context: ModelContext
+    private let context: ModelContext
     
     init(context: ModelContext) {
         self.context = context
         fetchGroups()
     }
     
-    func createGroup(name: String) {
-        let newGroup = Group(name: name, members: [], expenses: [])
-        groups.append(newGroup)
+    // MARK: - Group Management
+    
+    func createGroup(name: String, members: [User] = []) {
+        let newGroup = Group(name: name, members: members, expenses: [])
+        context.insert(newGroup)
+        saveContext()
     }
+    
+    func deleteGroup(_ group: Group) {
+        context.delete(group)
+        saveContext()
+    }
+    
+    func addMember(to group: Group, member: User) {
+        context.insert(member)
+        if let index = groups.firstIndex(where: { $0.id == group.id }) {
+            groups[index].members.append(member)
+        }
+        saveContext()
+    }
+    
+    func addMember(to group: Group, name: String, phoneNumber: String) {
+        let newUser = User(name: name, phoneNumber: phoneNumber)
+        addMember(to: group, member: newUser)
+    }
+    
+    // MARK: - Fetching
     
     func fetchGroups() {
         do {
             groups = try context.fetch(FetchDescriptor<Group>())
         } catch {
-            print("Failed to fetch:", error)
+            print("Failed to fetch groups:", error)
         }
     }
     
-    func addMember(to group: Group, member: User) {
-        if let index = groups.firstIndex(where: { $0.id == group.id }) {
-            groups[index].members.append(member)
-        }
-    }
+    // MARK: - Private
     
-    func addMember(to group: Group, name: String, phoneNumber: String) {
-        let newUser = User(name: name, phoneNumber: phoneNumber)
-        group.members.append(newUser)
-        context.insert(newUser)
-        try? context.save()
-    }
-    
-    func deleteGroup(_ group: Group) {
-        context.delete(group)
+    private func saveContext() {
         do {
             try context.save()
-            fetchGroups()
+            fetchGroups() // Refresh the published array to update UI
         } catch {
-            print("Failed to delete group:", error)
+            print("Failed to save context:", error)
         }
     }
-    
-    
 }

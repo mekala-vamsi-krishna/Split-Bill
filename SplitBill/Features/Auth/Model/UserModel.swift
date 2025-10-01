@@ -11,12 +11,16 @@ import SwiftData
 @Model
 class User: Identifiable {
     var id: UUID
+    var uid: String?        // Firebase UID
     var name: String
     var phoneNumber: String
-    
-    init(name: String, phoneNumber: String) {
+    var email: String?
+
+    init(name: String, phoneNumber: String, uid: String? = nil, email: String? = nil) {
         self.id = UUID()
+        self.uid = uid
         self.name = name
         self.phoneNumber = phoneNumber
+        self.email = email
     }
 }
