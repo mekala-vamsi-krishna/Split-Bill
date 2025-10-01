@@ -33,7 +33,6 @@ struct MembersView: View {
                 List {
                     ForEach(group.members) { member in
                         HStack(spacing: 12) {
-                            // Avatar with initials
                             ZStack {
                                 Circle()
                                     .fill(Color.blue.opacity(0.2))
@@ -53,9 +52,19 @@ struct MembersView: View {
                             Spacer()
                         }
                         .padding(.vertical, 6)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                if let index = group.members.firstIndex(where: { $0.id == member.id }) {
+                                    groupViewModel.removeMember(from: group, at: IndexSet(integer: index))
+                                }
+                            } label: {
+                                Image(systemName: "trash")
+                            }
+                        }
                     }
                 }
                 .listStyle(PlainListStyle())
+
             }
 
             Spacer()
