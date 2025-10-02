@@ -38,3 +38,37 @@ class GroupDetailsViewModel: ObservableObject {
         try? context.save()
     }
 }
+
+struct Balance {
+    let user: User
+    let amount: Double // positive = receive, negative = pay
+}
+
+extension Group {
+    func calculateBalances() -> [Balance] {
+        var balances: [UUID: Double] = [:]
+
+        // Initialize balances
+        for member in members {
+            balances[member.id] = 0
+        }
+
+        // Calculate share for each expense
+        for expense in expenses {
+            let splitAmount = expense.amount / Double(expense.participants.count)
+
+            // Each participant owes `splitAmount`
+            for participant in expense.participants {
+                balances[participant.id, default: 0] -= splitAmount
+            }
+
+            // Payer gets credited full expense
+            balances[expense.paidBy.id, default: 0] += expense.amount
+        }
+
+        // Convert dictionary to Balance objects
+        return members.map { member in
+            Balance(user: member, amount: balances[member.id] ?? 0)
+        }
+    }
+}

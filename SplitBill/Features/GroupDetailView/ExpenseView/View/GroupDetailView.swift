@@ -11,6 +11,7 @@ import SwiftData
 struct GroupDetailView: View {
     let group: Group
     @EnvironmentObject var createGroupViewModel: GroupDetailsViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject var addExpenseViewModel = AddExpenseViewModel()
 
     @State private var navigateToMembers = false
@@ -19,45 +20,53 @@ struct GroupDetailView: View {
     private var totalExpenses: Double {
         group.expenses.reduce(0) { $0 + $1.amount }
     }
+    
+    let currentUser = User(name: "Me", phoneNumber: "9999999999") // Replace with real
 
     var body: some View {
         VStack {
             // Quick Stats
-            HStack {
-                VStack {
-                    Text("\(group.members.count)")
-                        .font(.title2)
-                        .fontWeight(.heavy)
-                    Text("Members")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+            // Settlement Summary
+            if let myBalance = group.calculateBalances().first(where: { $0.user.id == authViewModel.currentUser?.id }) {
+                VStack(spacing: 12) {
+                    if myBalance.amount > 0 {
+                        VStack(spacing: 4) {
+                            Text("You will receive")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            Text("+₹\(myBalance.amount, specifier: "%.2f")")
+                                .font(.largeTitle.bold())
+                                .foregroundColor(.green)
+                        }
+                    } else if myBalance.amount < 0 {
+                        // Find who should receive
+                        if let receiver = group.calculateBalances().max(by: { $0.amount < $1.amount }) {
+                            VStack(spacing: 4) {
+                                Text("You owe \(receiver.user.name)")
+                                    .font(.headline)
+                                    .foregroundColor(.secondary)
+                                Text("-₹\(-myBalance.amount, specifier: "%.2f")")
+                                    .font(.largeTitle.bold())
+                                    .foregroundColor(.red)
+                            }
+                        }
+                    } else {
+                        VStack(spacing: 4) {
+                            Text("All Settled 🎉")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            Text("₹0.00")
+                                .font(.largeTitle.bold())
+                                .foregroundColor(.gray)
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity)
-                
-                VStack {
-                    Text("\(group.expenses.count)")
-                        .font(.title2)
-                        .fontWeight(.heavy)
-                    Text("Expenses")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity)
-                
-                VStack {
-                    Text("₹\(totalExpenses, specifier: "%.2f")")
-                        .font(.title2)
-                        .fontWeight(.heavy)
-                    Text("Total")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(16)
+                .padding(.horizontal)
             }
-            .padding()
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(10)
-            .padding()
             
             // Action Buttons
             HStack(spacing: 15) {

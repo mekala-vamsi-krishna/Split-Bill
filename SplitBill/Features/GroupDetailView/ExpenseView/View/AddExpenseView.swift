@@ -17,6 +17,8 @@ struct AddExpenseView: View {
     @State private var expenseAmount = ""
     @State private var selectedPayer: User?
     
+    @State private var selectedParticipants: [User] = []
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
@@ -27,7 +29,7 @@ struct AddExpenseView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
-                    TextField("e.g. Dinner, Uber, Movie", text: $expenseTitle)
+                    TextField("e.g. Dinner, Travel, Movie", text: $expenseTitle)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
@@ -81,32 +83,70 @@ struct AddExpenseView: View {
                     }
                 }
                 
+                // MARK: - Participants Picker
+                if !group.members.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Paid for?")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 16) {
+                            ForEach(group.members) { member in
+                                VStack {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(selectedParticipants.contains(where: { $0.id == member.id }) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.1))
+                                            .frame(height: 70)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(selectedParticipants.contains(where: { $0.id == member.id }) ? Color.blue : Color.clear, lineWidth: 2)
+                                            )
+                                        
+                                        VStack {
+                                            Text(initials(from: member.name))
+                                                .font(.title3).bold()
+                                                .foregroundColor(selectedParticipants.contains(where: { $0.id == member.id }) ? .blue : .secondary)
+                                            Text(member.name)
+                                                .font(.caption)
+                                                .lineLimit(1)
+                                        }
+                                    }
+                                }
+                                .onTapGesture {
+                                    if let index = selectedParticipants.firstIndex(where: { $0.id == member.id }) {
+                                        selectedParticipants.remove(at: index)
+                                    } else {
+                                        selectedParticipants.append(member)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 Spacer()
             }
             .padding()
             .navigationTitle("New Expense")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
-                        if let payer = selectedPayer,
-                           let amount = Double(expenseAmount) {
-                            addExpenseViewModel.addExpense(
-                                to: group,
-                                title: expenseTitle,
-                                amount: amount,
-                                paidBy: payer,
-                                participants: group.members
-                            )
-                            dismiss()
-                        }
-                    }
-                    .disabled(expenseTitle.trimmingCharacters(in: .whitespaces).isEmpty ||
-                              expenseAmount.trimmingCharacters(in: .whitespaces).isEmpty ||
-                              selectedPayer == nil)
-                    .fontWeight(.semibold)
+            Button("Save") {
+                if let payer = selectedPayer,
+                   let amount = Double(expenseAmount),
+                   !selectedParticipants.isEmpty {
+                    addExpenseViewModel.addExpense(
+                        to: group,
+                        title: expenseTitle,
+                        amount: amount,
+                        paidBy: payer,
+                        participants: selectedParticipants
+                    )
+                    dismiss()
                 }
             }
+            .disabled(expenseTitle.trimmingCharacters(in: .whitespaces).isEmpty ||
+                      expenseAmount.trimmingCharacters(in: .whitespaces).isEmpty ||
+                      selectedPayer == nil ||
+                      selectedParticipants.isEmpty)
         }
     }
     
